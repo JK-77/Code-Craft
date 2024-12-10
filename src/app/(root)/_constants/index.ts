@@ -418,12 +418,14 @@ export const THEME_DEFINITONS = {
     },
   },
 };
+// Define the valid built-in themes for Monaco Editor
+type BuiltinTheme = "vs" | "vs-dark" | "hc-black";
 
 // Helper function to define themes in Monaco
 export const defineMonacoThemes = (monaco: Monaco) => {
   Object.entries(THEME_DEFINITONS).forEach(([themeName, themeData]) => {
     monaco.editor.defineTheme(themeName, {
-      base: themeData.base,
+      base: themeData.base as BuiltinTheme, // Explicitly cast or ensure this value is valid
       inherit: themeData.inherit,
       rules: themeData.rules.map((rule) => ({
         ...rule,

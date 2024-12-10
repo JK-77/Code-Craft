@@ -1,9 +1,8 @@
 "use client";
-
 import { useCodeEditorStore } from "@/store/useCodeEditorStore";
 import { useEffect, useState } from "react";
 import { defineMonacoThemes, LANGUAGE_CONFIG } from "../_constants";
-import { Editor } from "@monaco-editor/react"
+import { Editor } from "@monaco-editor/react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { RotateCcwIcon, ShareIcon, TypeIcon } from "lucide-react";
@@ -11,43 +10,34 @@ import { useClerk } from "@clerk/nextjs";
 import { EditorPanelSkeleton } from "./EditorPanelSkeleton";
 import useMounted from "@/hooks/useMounted";
 import ShareSnippetDialog from "./ShareSnippetDialog";
-
 function EditorPanel() {
   const clerk = useClerk();
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const { language, theme, fontSize, editor, setFontSize, setEditor } = useCodeEditorStore();
-
   const mounted = useMounted();
-
   useEffect(() => {
     const savedCode = localStorage.getItem(`editor-code-${language}`);
     const newCode = savedCode || LANGUAGE_CONFIG[language].defaultCode;
-    if (editor) editor.setValue(newCode);
+    if (editor) editor.setValue(newCode)
   }, [language, editor]);
-
   useEffect(() => {
     const savedFontSize = localStorage.getItem("editor-font-size");
     if (savedFontSize) setFontSize(parseInt(savedFontSize));
   }, [setFontSize]);
-
   const handleRefresh = () => {
     const defaultCode = LANGUAGE_CONFIG[language].defaultCode;
     if (editor) editor.setValue(defaultCode);
     localStorage.removeItem(`editor-code-${language}`);
   };
-
   const handleEditorChange = (value: string | undefined) => {
     if (value) localStorage.setItem(`editor-code-${language}`, value);
   };
-
   const handleFontSizeChange = (newSize: number) => {
     const size = Math.min(Math.max(newSize, 12), 24);
     setFontSize(size);
     localStorage.setItem("editor-font-size", size.toString());
   };
-
   if (!mounted) return null;
-
   return (
     <div className="relative">
       <div className="relative bg-[#12121a]/90 backdrop-blur rounded-xl border border-white/[0.05] p-6">
@@ -80,7 +70,6 @@ function EditorPanel() {
                 </span>
               </div>
             </div>
-
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
@@ -90,7 +79,6 @@ function EditorPanel() {
             >
               <RotateCcwIcon className="size-4 text-gray-400" />
             </motion.button>
-
             {/* Share Button */}
             <motion.button
               whileHover={{ scale: 1.02 }}
@@ -104,7 +92,6 @@ function EditorPanel() {
             </motion.button>
           </div>
         </div>
-
         {/* Editor  */}
         <div className="relative group rounded-xl overflow-hidden ring-1 ring-white/[0.05]">
           {clerk.loaded && (
@@ -138,7 +125,6 @@ function EditorPanel() {
               }}
             />
           )}
-
           {!clerk.loaded && <EditorPanelSkeleton />}
         </div>
       </div>

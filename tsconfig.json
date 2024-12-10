@@ -20,9 +20,9 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "types": ["monaco-editor"]  // <-- Add this line to include Monaco's types
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
+
